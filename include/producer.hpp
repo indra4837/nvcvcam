@@ -41,6 +41,7 @@ namespace nvcvcam {
 class Producer : public thread::StoppableThread {
   using OptionalRangeU64 = std::experimental::optional<Argus::Range<uint64_t>>;
   using OptionalRangeFloat = std::experimental::optional<Argus::Range<float>>;
+  using OptionalIntU32 = std::experimental::optional<int32_t>;
 
  private:
   uint _csi_id;
@@ -200,6 +201,28 @@ class Producer : public thread::StoppableThread {
    */
   OptionalRangeU64 get_supported_exposure_time_range();
 
+  // /**
+  //  * @brief Set the aperture position object
+  //  * 
+  //  * @param position 
+  //  * @return Argus::Status 
+  //  */
+  // Argus::Status set_aperture_position(const int32_t position);
+
+  // /**
+  //  * @brief Get the aperture position object
+  //  * 
+  //  * @return OptionalIntU32 
+  //  */
+  // OptionalIntU32 get_aperture_position(); 
+
+  // /**
+  //  * @brief Get the supported apperture position object
+  //  * 
+  //  * @return OptionalIntU32 
+  //  */
+  // OptionalIntU32 get_supported_apperture_position();
+
   /**
    * @brief Get the **supported** frame duration range for the current mode.
    *
@@ -228,6 +251,21 @@ class Producer : public thread::StoppableThread {
    * @return an optional range (std::nullopt on failure)
    */
   OptionalRangeFloat get_supported_analog_gain_range();
+
+  /**
+   * @brief Set the isp digital gain range object
+   * 
+   * @param range 
+   * @return Argus::Status of the set operation 
+   */
+  Argus::Status set_isp_digital_gain_range(const Argus::Range<float> range);
+
+  /**
+   * @brief Get the isp digital gain range object
+   * 
+   * @return an optional range (std::nullopt on failure)
+   */
+  OptionalRangeFloat get_isp_digital_gain_range();
 };
 
 }  // namespace nvcvcam

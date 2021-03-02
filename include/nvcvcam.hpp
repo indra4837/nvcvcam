@@ -106,6 +106,15 @@ class NvCvCam {
   virtual bool set_analog_gain(float gain);
 
   /**
+   * @brief Set the isp digital gain object
+   * 
+   * @param gain to set
+   * @return true on success
+   * @return false on failure
+   */
+  virtual bool set_isp_digital_gain(float gain);
+
+  /**
    * @brief Get the analog gain range. (a range because auto-gain may be on).
    *
    * @return a range on success or std::nullopt on failure
@@ -119,6 +128,13 @@ class NvCvCam {
    */
   virtual std::experimental::optional<Argus::Range<float>>
   get_supported_analog_gain();
+
+  /**
+   * @brief Get the isp digital gain object
+   * 
+   * @return std::experimental::optional<Argus::Range<float>> 
+   */
+  virtual std::experimental::optional<Argus::Range<float>> get_isp_digital_gain();
 
  private:
   // FIXME(mdegans): ToTW 187 says this is wrong and I should use optional for

@@ -17,6 +17,7 @@
 #include <opencv2/cudaimgproc.hpp>
 #include <opencv2/cudawarping.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/cudaarithm.hpp>
 
 #include <assert.h>
 
@@ -48,6 +49,15 @@ int main() {
 
   INFO << TESTNAME << ":opening camera";
   assert(camera.open());
+
+  // set exposure on camera
+  // assert(camera.set_exposure(333333300000));
+
+  // set analog gain on camera
+  // assert(camera.set_analog_gain(8.0));
+
+  // set isp digital gain on camera
+  assert(camera.set_isp_digital_gain(16.0));
 
   INFO << TESTNAME << ":beginning captures. press esc to stop.";
   do {

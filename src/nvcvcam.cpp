@@ -277,6 +277,34 @@ NvCvCam::get_supported_analog_gain() {
   return _producer->get_supported_analog_gain_range();
 }
 
+bool NvCvCam::set_isp_digital_gain(float gain) {
+  IF_NOT_READY_RETURN(false);
+
+  Argus::Range<float> range;
+
+  if (gain >= 0.0) {
+    DEBUG << "nvcvcam:Using manual isp digital gain (" << gain << ").";
+    // set min and max to the same values, disabling any auto crap
+    range.max() = gain;
+    range.min() = gain;
+  } else {
+    DEBUG << "nvcvcam:Invalid isp digital gain value.";
+    return false;
+  }
+
+  // Argus::Status is non-zero on failure
+  if (_producer->set_analog_gain_range(range)) {
+    return false;
+  }
+
+  return true;
+}
+
+std::experimental::optional<Argus::Range<float>> NvCvCam::get_isp_digital_gain() {
+  IF_NOT_READY_RETURN(std::experimental::nullopt);
+  return _producer->get_isp_digital_gain_range();
+}
+
 NvCvCam::~NvCvCam() {
   close();
 }
