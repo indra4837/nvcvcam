@@ -515,6 +515,34 @@ Producer::get_isp_digital_gain_range() {
   return _iautocontrolsettings->getIspDigitalGainRange();
 }
 
+Argus::Status Producer::set_optical_black_enable(bool enable) {
+  std::unique_lock<std::mutex> lock(_settings_mx);
+  if (!(_request && _isourcesettings)) {
+    ERROR << "producer:Could not set optical black enable";
+    return Argus::Status::STATUS_UNAVAILABLE;
+  }
+  return _isourcesettings->setOpticalBlackEnable(enable);
+}
+
+Argus::Status Producer::set_optical_black(const Argus::BayerTuple<float>& opticalBlackLevels) {
+  std::unique_lock<std::mutex> lock(_settings_mx);
+  if (!(_request && _isourcesettings)) {
+        ERROR << "producer:Could not set optical black levels";
+    return Argus::Status::STATUS_UNAVAILABLE;
+  }
+  return _isourcesettings->setOpticalBlack(opticalBlackLevels);
+}
+
+std::experimental::optional<bool>
+Producer::get_optical_black_enable() {
+  std::unique_lock<std::mutex> lock(_settings_mx);
+  if (!(_request && _isourcesettings)) {
+    ERROR << "producer:Could not get optical black enable.";
+    return std::experimental::nullopt;
+  }
+  return _isourcesettings->getOpticalBlackEnable();
+}
+
 Producer::~Producer() {
   DEBUG << "producer:Destructor reached.";
 }

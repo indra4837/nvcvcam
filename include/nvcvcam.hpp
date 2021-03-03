@@ -106,15 +106,6 @@ class NvCvCam {
   virtual bool set_analog_gain(float gain);
 
   /**
-   * @brief Set the isp digital gain object
-   * 
-   * @param gain to set
-   * @return true on success
-   * @return false on failure
-   */
-  virtual bool set_isp_digital_gain(float gain);
-
-  /**
    * @brief Get the analog gain range. (a range because auto-gain may be on).
    *
    * @return a range on success or std::nullopt on failure
@@ -130,11 +121,38 @@ class NvCvCam {
   get_supported_analog_gain();
 
   /**
+   * @brief Set the isp digital gain object
+   * 
+   * @param gain to set
+   * @return true on success
+   * @return false on failure
+   */
+  virtual bool set_isp_digital_gain(float gain);
+
+  /**
    * @brief Get the isp digital gain object
    * 
    * @return std::experimental::optional<Argus::Range<float>> 
    */
   virtual std::experimental::optional<Argus::Range<float>> get_isp_digital_gain();
+
+  /**
+   * @brief Set the optical black enable object
+   * 
+   * @param enable to allow user-specified black levels
+   * @return true on success
+   * @return false on failure
+   */
+  virtual bool set_optical_black_enable(bool enable);
+
+  /**
+   * @brief Set the optical black object
+   * 
+   * @param opticalBlackLevels 
+   * @return true on success
+   * @return false on failure
+   */
+  virtual bool set_optical_black(const Argus::BayerTuple<float> opticalBlackLevels);
 
  private:
   // FIXME(mdegans): ToTW 187 says this is wrong and I should use optional for

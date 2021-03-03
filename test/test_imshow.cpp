@@ -62,6 +62,14 @@ int main() {
   // set isp digital gain on camera
   // assert(camera.set_isp_digital_gain(16.0));
 
+  // enable user-specified optical black levels
+  assert(camera.set_optical_black_enable(true));
+
+  INFO
+
+  // set optical black levels
+  assert(camera.set_optical_black(0));
+
   INFO << TESTNAME << ":beginning captures. press esc to stop.";
   do {
     INFO << TESTNAME << ":capturing frame";
@@ -79,7 +87,7 @@ int main() {
     // see note: The factor is not 1/256 but 1/257 because you map range
     // (0-65535) to (0-255), 65535/255 = 257. This is a common off-by-one error
     // in range mapping.
-    // mat_b.convertTo(mat_c, CV_8UC4, 1.0 / (4096 / 255));
+    mat_b.convertTo(mat_c, CV_8UC4, 1.0 / (4096 / 255));
 
     // NOTES(indra): possible to try normalizing it to dynamically find range
     // however, assert(src.channels() == 1)

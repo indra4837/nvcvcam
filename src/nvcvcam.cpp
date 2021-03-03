@@ -305,6 +305,22 @@ std::experimental::optional<Argus::Range<float>> NvCvCam::get_isp_digital_gain()
   return _producer->get_isp_digital_gain_range();
 }
 
+bool NvCvCam::set_optical_black_enable(bool enable) {
+  if(_producer->set_optical_black_enable(enable)) {
+    return false;
+  }
+
+  return true;
+}
+
+bool NvCvCam::set_optical_black(const Argus::BayerTuple<float> opticalBlackLevels) {
+  if(_producer->set_optical_black(opticalBlackLevels)) {
+    return false;
+  }
+
+  return true;
+}
+
 NvCvCam::~NvCvCam() {
   close();
 }

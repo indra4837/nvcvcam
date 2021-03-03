@@ -42,6 +42,7 @@ class Producer : public thread::StoppableThread {
   using OptionalRangeU64 = std::experimental::optional<Argus::Range<uint64_t>>;
   using OptionalRangeFloat = std::experimental::optional<Argus::Range<float>>;
   using OptionalIntU32 = std::experimental::optional<int32_t>;
+  using OptionalBool = std::experimental::optional<bool>;
 
  private:
   uint _csi_id;
@@ -244,6 +245,29 @@ class Producer : public thread::StoppableThread {
    * @return an optional range (std::nullopt on failure)
    */
   OptionalRangeFloat get_isp_digital_gain_range();
+
+  /**
+   * @brief Set the optical black enable object
+   * 
+   * @param enable 
+   * @return Argus::Status of the set operation
+   */
+  Argus::Status set_optical_black_enable(bool enable);
+
+  /**
+   * @brief Set the optical black object
+   * 
+   * @param opticalBlackLevels 
+   * @return Argus::Status of the set operation
+   */
+  Argus::Status set_optical_black(const Argus::BayerTuple<float>& opticalBlackLevels);
+
+  /**
+   * @brief Get the optical black enable object
+   * 
+   * @return OptionalBool 
+   */
+  OptionalBool get_optical_black_enable();
 };
 
 }  // namespace nvcvcam
