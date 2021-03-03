@@ -65,8 +65,6 @@ int main() {
   // enable user-specified optical black levels
   assert(camera.set_optical_black_enable(true));
 
-  INFO
-
   // set optical black levels
   assert(camera.set_optical_black(0));
 
