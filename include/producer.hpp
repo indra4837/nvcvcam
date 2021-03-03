@@ -201,28 +201,6 @@ class Producer : public thread::StoppableThread {
    */
   OptionalRangeU64 get_supported_exposure_time_range();
 
-  // /**
-  //  * @brief Set the aperture position object
-  //  * 
-  //  * @param position 
-  //  * @return Argus::Status 
-  //  */
-  // Argus::Status set_aperture_position(const int32_t position);
-
-  // /**
-  //  * @brief Get the aperture position object
-  //  * 
-  //  * @return OptionalIntU32 
-  //  */
-  // OptionalIntU32 get_aperture_position(); 
-
-  // /**
-  //  * @brief Get the supported apperture position object
-  //  * 
-  //  * @return OptionalIntU32 
-  //  */
-  // OptionalIntU32 get_supported_apperture_position();
-
   /**
    * @brief Get the **supported** frame duration range for the current mode.
    *

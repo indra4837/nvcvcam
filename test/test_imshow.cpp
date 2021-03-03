@@ -18,6 +18,7 @@
 #include <opencv2/cudawarping.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/cudaarithm.hpp>
+#include <opencv2/core/base.hpp>
 
 #include <assert.h>
 
@@ -40,7 +41,9 @@ int main() {
   INFO << TESTNAME << ":starting";
 
   INFO << TESTNAME << ":creating camera";
+
   nvcvcam::NvCvCam camera;
+  std::unique_ptr<nvcvcam::Frame> frame(nullptr);  // frame wrapper
 
   cv::cuda::GpuMat mat_a;  // debayered
   cv::cuda::GpuMat mat_b;  // scaled
@@ -54,10 +57,10 @@ int main() {
   // assert(camera.set_exposure(333333300000));
 
   // set analog gain on camera
-  // assert(camera.set_analog_gain(8.0));
+  // assert(camera.set_analog_gain(4.0));
 
   // set isp digital gain on camera
-  assert(camera.set_isp_digital_gain(16.0));
+  // assert(camera.set_isp_digital_gain(16.0));
 
   INFO << TESTNAME << ":beginning captures. press esc to stop.";
   do {
@@ -76,8 +79,12 @@ int main() {
     // see note: The factor is not 1/256 but 1/257 because you map range
     // (0-65535) to (0-255), 65535/255 = 257. This is a common off-by-one error
     // in range mapping.
-    mat_b.convertTo(mat_c, CV_8UC4, 1.0 / 257.0);
+    // mat_b.convertTo(mat_c, CV_8UC4, 1.0 / (4096 / 255));
 
+    // NOTES(indra): possible to try normalizing it to dynamically find range
+    // however, assert(src.channels() == 1)
+    // cv::cuda::normalize(mat_b, mat_c, 0, 255, cv::NORM_MINMAX, CV_8UC4);
+    
     // optional gamma correction / lut / whatever here
 
     // NOTE(mdegans): while the imshow docs claims you can, it does not appear
@@ -90,6 +97,8 @@ int main() {
 
     cv::imshow("capture view, press esc to exit", showme);
   } while (27 != cv::waitKey(1));
+
+  frame.reset(nullptr);
 
   INFO << TESTNAME << ":closing camera";
   assert(camera.close());

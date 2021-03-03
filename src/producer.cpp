@@ -453,34 +453,6 @@ Producer::get_supported_exposure_time_range() {
   return _imode->getExposureTimeRange();
 }
 
-// Argus::Status Producer::set_aperture_position(int32_t position) {
-//   std::unique_lock<std::mutex> lock(_settings_mx);
-//   if (!(_request && _isourcesettings)) {
-//     return Argus::Status::STATUS_UNAVAILABLE;
-//   }
-//   return _isourcesettings->setAperturePosition(position);
-// }
-
-// std::experimental::optional<int32_t>
-// Producer::get_aperture_position() {
-//   std::unique_lock<std::mutex> lock(_settings_mx);
-//   if (!(_request && _isourcesettings)) {
-//     ERROR << "producer:Could not get aperture position.";
-//     return std::experimental::nullopt;
-//   }
-//   return _isourcesettings->getAperturePosition();
-// }
-
-// std::experimental::optional<Argus::Range<uint64_t>>
-// Producer::get_supported_aperture_position() {
-//   std::unique_lock<std::mutex> lock(_settings_mx);
-//   if (!(_mode && _imode)) {
-//     ERROR << "producer:Could not get supported aperture positions.";
-//     return std::experimental::nullopt;
-//   }
-//   return _imode->getAperturePosition();
-// }
-
 std::experimental::optional<Argus::Range<uint64_t>>
 Producer::get_supported_frame_duration_range() {
   std::unique_lock<std::mutex> lock(_settings_mx);

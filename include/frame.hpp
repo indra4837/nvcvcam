@@ -53,9 +53,9 @@ class Frame {
    * @return false on failure
    */
   bool get_debayered(cv::cuda::GpuMat& out,
-                     int code = cv::COLOR_BayerGB2BGR,
+                     int code = cv::COLOR_BayerRG2BGR,
                      cv::cuda::Stream& stream = cv::cuda::Stream::Null());
-  // int code = cv::COLOR_BayerRG2BGR
+  
   /**
    * @return resolution of the frame.
    */
