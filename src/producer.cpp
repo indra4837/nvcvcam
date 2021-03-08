@@ -238,6 +238,19 @@ bool Producer::setup() {
   return true;
 }
 
+bool Producer::on_running() {
+  auto err = update_request();
+  if (err == Argus::STATUS_UNAVAILABLE) {
+    DEBUG << "producer:Not yet available. Retrying.";
+    std::this_thread::sleep_for(std::chrono::microseconds(1000));
+    return on_running();
+  }
+  if (err) {
+    return false;
+  }
+  return true;
+}
+
 bool Producer::cleanup() {
   DEBUG << "producer:Cleaning up.";
 
@@ -384,28 +397,14 @@ bool Producer::set_mode(uint32_t csi_mode) {
   return set_mode(modes[csi_mode]);
 }
 
-bool Producer::tick() {
-  return enqueue_request();
-}
-
-bool Producer::enqueue_request(std::chrono::nanoseconds timeout) {
-  Argus::Status err;
-
-  if (!(ready())) {
-    ERROR << "producer:Not ready to enqueue request.";
-    return false;
-  }
-
-  // request a capture
-  DEBUG << "producer:Requesting capture.";
-  _isession->capture(_request.get(), timeout.count(), &err);
+Argus::Status Producer::update_request() {
+  DEBUG << "producer:Starting/updating repeat capture.";
+  auto err = _isession->repeat(_request.get());
   if (err) {
-    ERROR << "producer:Could not request a capture (status " << err << ").";
-    return false;
+    ERROR << "producer:Could not start/update repeat capture (status " << err
+          << ").";
   }
-
-  // success
-  return true;
+  return err;
 }
 
 Argus::ISensorMode* Producer::get_imode() {
@@ -430,7 +429,11 @@ Argus::Status Producer::set_exposure_time_range(Argus::Range<uint64_t> range) {
   if (!(_request && _isourcesettings)) {
     return Argus::Status::STATUS_UNAVAILABLE;
   }
-  return _isourcesettings->setExposureTimeRange(range);
+  auto err = _isourcesettings->setExposureTimeRange(range);
+  if (err) {
+    return err;
+  }
+  return update_request();
 }
 
 std::experimental::optional<Argus::Range<uint64_t>>
@@ -468,7 +471,11 @@ Argus::Status Producer::set_analog_gain_range(Argus::Range<float> range) {
   if (!(_request && _isourcesettings)) {
     return Argus::Status::STATUS_UNAVAILABLE;
   }
-  return _isourcesettings->setGainRange(range);
+  auto err = _isourcesettings->setGainRange(range);
+  if (err) {
+    return err;
+  }
+  return update_request();
 }
 
 std::experimental::optional<Argus::Range<float>>
